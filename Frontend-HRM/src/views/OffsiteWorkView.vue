@@ -72,23 +72,12 @@
           <div class="form-section">
             <h3>สถานที่ปฏิบัติงาน</h3>
             <div class="map-container">
-              <div class="map-placeholder">
-                <div class="map-search">
-                  <input type="text" placeholder="ค้นหาสถานที่" class="search-input">
-                  <button class="search-btn">🔍</button>
-                </div>
-                <div class="map-content">
-                  <div class="map-markers">
-                    <div class="marker" style="top: 30%; left: 40%;">📍</div>
-                    <div class="marker" style="top: 50%; left: 60%;">📍</div>
-                    <div class="marker" style="top: 70%; left: 30%;">📍</div>
-                  </div>
-                  <div class="map-zoom">
-                    <button class="zoom-btn">+</button>
-                    <button class="zoom-btn">-</button>
-                  </div>
-                </div>
+              <div class="map-search-box">
+                <input type="text" v-model="searchQuery" @keyup.enter="searchLocation" placeholder="ค้นหาสถานที่"
+                  class="search-input">
+                <button @click="searchLocation" class="search-btn">🔍</button>
               </div>
+              <div id="map" ref="mapContainer" class="real-map"></div>
             </div>
 
             <div class="form-group">
@@ -237,13 +226,6 @@
               rows="3"></textarea>
           </div>
         </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-          <button class="btn btn-secondary">ยกเลิก</button>
-          <button class="btn btn-warning">บันทึกร่าง</button>
-          <button class="btn btn-primary">บันทึก</button>
-        </div>
       </div>
 
       <!-- Right Sidebar - Approval Timeline -->
@@ -274,6 +256,13 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Action Buttons - ย้ายออกมาจาก main-content -->
+    <div class="action-buttons">
+      <button class="btn btn-secondary">ยกเลิก</button>
+      <button class="btn btn-warning">บันทึกร่าง</button>
+      <button class="btn btn-primary">บันทึก</button>
     </div>
 
     <!-- Add Staff Sidebar -->
@@ -325,7 +314,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 // Form data
 const formData = reactive({
@@ -345,9 +334,9 @@ const formData = reactive({
 })
 
 // Staff management
-const staffList = ref([])
+const staffList = ref<any[]>([])
 const showAddStaffModal = ref(false)
-const newStaff = reactive({
+const newStaff = reactive<Record<string, any>>({
   personnel: 'staff',
   position: '',
   level: '',
@@ -366,21 +355,118 @@ const documents = ref([
   }
 ])
 
-const fileInput = ref(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+
+// Map management
+const mapContainer = ref<HTMLElement | null>(null)
+const searchQuery = ref('')
+let map: any = null
+let marker: any = null
+
+// Initialize map
+onMounted(() => {
+  // Load Leaflet CSS
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css'
+  document.head.appendChild(link)
+
+  // Load Leaflet JS
+  const script = document.createElement('script')
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'
+  script.onload = () => {
+    initMap()
+  }
+  document.head.appendChild(script)
+})
+
+const initMap = () => {
+  if (!mapContainer.value) return
+
+  // @ts-ignore
+  const L = window.L
+
+  // Initialize map centered on Thailand (Bangkok)
+  map = L.map(mapContainer.value).setView([13.7563, 100.5018], 12)
+
+  // Add OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map)
+
+  // Add click event to map
+  map.on('click', (e: any) => {
+    addMarker(e.latlng.lat, e.latlng.lng)
+  })
+}
+
+const addMarker = (lat: number, lng: number) => {
+  // @ts-ignore
+  const L = window.L
+
+  // Remove existing marker if any
+  if (marker) {
+    map.removeLayer(marker)
+  }
+
+  // Add new marker
+  marker = L.marker([lat, lng]).addTo(map)
+
+  // Update location link
+  formData.locationLink = `https://www.google.com/maps?q=${lat},${lng}`
+}
+
+const searchLocation = async () => {
+  if (!searchQuery.value.trim()) return
+
+  try {
+    // Use Nominatim geocoding service (free)
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery.value)}&limit=1`
+    )
+    const data = await response.json()
+
+    if (data && data.length > 0) {
+      const { lat, lon, display_name } = data[0]
+      map.setView([parseFloat(lat), parseFloat(lon)], 15)
+      addMarker(parseFloat(lat), parseFloat(lon))
+      formData.location = display_name
+    } else {
+      alert('ไม่พบสถานที่ที่ค้นหา')
+    }
+  } catch (error) {
+    console.error('Error searching location:', error)
+    alert('เกิดข้อผิดพลาดในการค้นหาสถานที่')
+  }
+}
+
+onUnmounted(() => {
+  if (map) {
+    map.remove()
+  }
+})
 
 // Methods
 const triggerFileUpload = () => {
-  fileInput.value.click()
+  if (fileInput.value) {
+    fileInput.value.click()
+  }
 }
 
-const handleFileUpload = (event) => {
-  const files = event.target.files
-  // Handle file upload logic here
+const handleFileUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const files = target.files
+  if (files && files.length > 0) {
+    console.log('Uploaded files:', files)
+  }
 }
 
-const handleFileDrop = (event: { dataTransfer: { files: any } }) => {
-  const files = event.dataTransfer.files
-  // Handle file drop logic here
+const handleFileDrop = (event: DragEvent) => {
+  const files = event.dataTransfer?.files
+  if (files && files.length > 0) {
+    console.log('Dropped files:', files)
+  }
 }
 
 const addStaff = () => {
@@ -393,22 +479,22 @@ const addStaff = () => {
   })
   showAddStaffModal.value = false
   // Reset form
-  Object.keys(newStaff).forEach(key => {
+  Object.keys(newStaff).forEach((key) => {
     newStaff[key] = ''
   })
   newStaff.personnel = 'staff'
 }
 
-const editStaff = () => {
-  // Edit staff logic
+const editStaff = (index: number) => {
+  console.log('Edit staff at index:', index)
 }
 
 const removeStaff = (index: number) => {
   staffList.value.splice(index, 1)
 }
 
-const viewDocument = () => {
-  // View document logic
+const viewDocument = (doc: any) => {
+  console.log('View document:', doc)
 }
 
 const removeDocument = (index: number) => {
@@ -416,7 +502,12 @@ const removeDocument = (index: number) => {
 }
 </script>
 
+
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .offsite-work-page {
   width: 100%;
   margin: 0;
@@ -482,7 +573,7 @@ const removeDocument = (index: number) => {
 /* Content Wrapper */
 .content-wrapper {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - 120px);
 }
 
 .main-content {
@@ -566,81 +657,53 @@ const removeDocument = (index: number) => {
 /* Map Styles */
 .map-container {
   margin-bottom: 20px;
-}
-
-.map-placeholder {
-  height: 300px;
-  background: linear-gradient(135deg, #f0f9f0, #e8f5e8);
-  border: 2px dashed #a0d0a0;
-  border-radius: 8px;
   position: relative;
-  overflow: hidden;
 }
 
-.map-search {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
+.map-search-box {
   display: flex;
-  z-index: 10;
+  gap: 0;
+  margin-bottom: 10px;
+  z-index: 400;
+  position: relative;
+}
+
+.real-map {
+  height: 400px;
+  width: 100%;
+  border-radius: 8px;
+  border: 2px solid #d0d0d0;
+  z-index: 1;
 }
 
 .search-input {
   flex: 1;
-  padding: 10px;
+  padding: 10px 15px;
   border: 1px solid #d0d0d0;
   border-radius: 4px 0 0 4px;
   background-color: white;
   color: #000;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3498db;
 }
 
 .search-btn {
-  padding: 10px 15px;
+  padding: 10px 20px;
   background: #3498db;
   color: white;
   border: none;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
 }
 
-.map-content {
-  position: relative;
-  height: 100%;
-}
-
-.map-markers {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.marker {
-  position: absolute;
-  font-size: 20px;
-}
-
-.map-zoom {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.zoom-btn {
-  width: 30px;
-  height: 30px;
-  background: white;
-  border: 1px solid #d0d0d0;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  font-weight: bold;
+.search-btn:hover {
+  background: #2980b9;
 }
 
 /* Date Section */
@@ -818,12 +881,14 @@ const removeDocument = (index: number) => {
   background: #fff5f5;
 }
 
-/* Action Buttons */
+/* Action Buttons - ย้ายออกมานอก content-wrapper */
 .action-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 15px;
-  padding: 20px 0;
+  padding: 24px 30px 30px 30px;
+  border-top: 2px solid #bebebe;
+  background: white;
 }
 
 /* Right Sidebar - Approval Timeline */
@@ -888,7 +953,6 @@ const removeDocument = (index: number) => {
   color: #000000;
   margin-bottom: 4px;
 }
-
 
 .step-name2 {
   font-size: 14px;
@@ -972,7 +1036,6 @@ const removeDocument = (index: number) => {
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: flex-end;
-  /* ดัน panel ไปด้านขวา */
   z-index: 1000;
 }
 
@@ -980,43 +1043,12 @@ const removeDocument = (index: number) => {
 .sidebar-panel {
   background: #fff;
   width: 400px;
-  /* ความกว้าง sidebar */
   max-width: 90%;
-  /* ถ้าเป็นจอเล็กจะหด */
   height: 100vh;
-  /* เต็มจอแนวตั้ง */
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s ease-out;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Header / Footer จัดตามโครงสร้างเดิม */
-.modal-header,
-.modal-footer {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-}
-
-.modal-footer {
-  border-top: 1px solid #eee;
-  margin-top: auto;
-  /* ดันไปด้านล่าง */
-}
-
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 15px;
-}
-
-/* ปุ่มปิด */
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  float: right;
 }
 
 /* Animation */
@@ -1030,15 +1062,10 @@ const removeDocument = (index: number) => {
   }
 }
 
-
 /* Responsive Design */
 @media (max-width: 1400px) {
-  .right-sidebar {
+  .right-frame {
     width: 280px;
-  }
-
-  .main-content {
-    padding-right: 310px;
   }
 }
 
@@ -1052,12 +1079,8 @@ const removeDocument = (index: number) => {
     padding-bottom: 28px;
   }
 
-  .right-sidebar {
+  .right-frame {
     width: 260px;
-  }
-
-  .main-content {
-    padding-right: 290px;
   }
 
   .breadcrumb-nav {
@@ -1075,13 +1098,14 @@ const removeDocument = (index: number) => {
     padding-right: 30px;
   }
 
-  .right-sidebar {
+  .right-frame {
     position: relative;
     width: 100%;
     height: auto;
     border-left: none;
     border-top: 2px dashed #d0d0d0;
     top: 0;
+    padding-top: 20px;
   }
 
   .breadcrumb-nav span:not(.current) {
@@ -1203,6 +1227,7 @@ const removeDocument = (index: number) => {
   .action-buttons {
     flex-direction: column;
     gap: 10px;
+    padding: 20px;
   }
 
   .btn {

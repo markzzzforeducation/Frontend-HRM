@@ -333,10 +333,12 @@ onUnmounted(() => {
   height: 132px;
   flex-shrink: 0;
   object-fit: contain;
+  transition: all 0.3s ease;
 }
 
-.sidebar.collapsed .logo {
-  justify-content: center;
+.sidebar.collapsed .logo-img {
+  width: 40px;
+  height: 40px;
 }
 
 .hamburger-menu {
@@ -417,7 +419,7 @@ onUnmounted(() => {
   height: 20px;
   margin-right: 12px;
   flex-shrink: 0;
-  color: #ffc107;
+  color: #ffd761;
 }
 
 .sidebar.collapsed .nav-link {
@@ -491,7 +493,7 @@ onUnmounted(() => {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-  color: #ffc107;
+  color: #ffdb6f;
   margin-right: 4px;
 }
 
