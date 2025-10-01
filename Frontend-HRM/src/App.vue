@@ -1,85 +1,78 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
+import MainLayout from './components/MainLayout.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <MainLayout>
+    <RouterView />
+  </MainLayout>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
+html,
+body {
+  height: 100%;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #2c3e50;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+#app {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+/* Force fullscreen */
+html,
+body,
+#app {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  font-size: 100% !important;
+  vertical-align: baseline !important;
+  background: transparent !important;
 }
 
-nav a:first-of-type {
-  border: 0;
+/* Fullscreen styles */
+.fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: #f8f9fa !important;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+/* Hide browser UI elements when in fullscreen */
+.fullscreen body {
+  overflow: hidden !important;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.fullscreen #app {
+  height: 100vh !important;
+  width: 100vw !important;
 }
 </style>
