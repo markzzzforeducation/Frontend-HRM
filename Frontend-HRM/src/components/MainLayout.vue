@@ -7,11 +7,6 @@
         <div class="logo">
           <img src="/src/assets/hrm-logo.png" alt="HRM FINEARTS" class="logo-img">
         </div>
-        <button class="hamburger-menu" @click="toggleSidebar">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
       </div>
 
       <nav class="sidebar-nav">
@@ -71,40 +66,98 @@
             </a>
             <ul class="submenu" v-show="expandedMenus.includes('leave-work') && !sidebarCollapsed">
               <li class="submenu-item">
-                <a href="#" class="submenu-link">เวลาปฏิบัติราชการ</a>
+                <a href="#" class="submenu-link">
+                  <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  เวลาปฏิบัติราชการ
+                </a>
               </li>
               <li class="submenu-item">
-                <a href="#" class="submenu-link">กลุ่มงานทะเบียนประวัติ ทำเหน็จความชอบและระบบสารสนเทศ ทรัพยากรบุคคล</a>
+                <a href="#" class="submenu-link">
+                  <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  กลุ่มงานทะเบียนประวัติ ทำเหน็จความชอบและระบบสารสนเทศ ทรัพยากรบุคคล
+                </a>
               </li>
               <li class="submenu-item">
-                <a href="#" class="submenu-link">กลุ่มงานอัตรากำลังและพัฒนาระบบบริหารทรัพยากรบุคคล</a>
+                <a href="#" class="submenu-link">
+                  <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  กลุ่มงานอัตรากำลังและพัฒนาระบบบริหารทรัพยากรบุคคล
+                </a>
               </li>
               <li class="submenu-item has-submenu" :class="{ 'expanded': expandedMenus.includes('recruitment') }">
                 <a href="#" class="submenu-link" @click.prevent="toggleSubmenu('recruitment')">
-                  กลุ่มงานสรรหาและบรรจุแต่งตั้ง
+                  <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>กลุ่มงานสรรหาและบรรจุแต่งตั้ง</span>
                   <svg class="submenu-arrow" :class="{ 'rotated': expandedMenus.includes('recruitment') }" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </a>
                 <ul class="submenu nested-submenu" v-show="expandedMenus.includes('recruitment')">
                   <li class="submenu-item">
-                    <router-link to="/offsite-work" class="submenu-link">บันทึกการปฏิบัติงานนอกสถานที่</router-link>
+                    <router-link to="/offsite-work" class="submenu-link nested">
+                      <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      บันทึกการปฏิบัติงานนอกสถานที่
+                    </router-link>
                   </li>
                   <li class="submenu-item">
-                    <a href="#" class="submenu-link">จัดการรับสมัครงาน</a>
+                    <a href="#" class="submenu-link nested">
+                      <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                      จัดการรับสมัครงาน
+                    </a>
                   </li>
                   <li class="submenu-item">
-                    <a href="#" class="submenu-link">การดำเนินการจัดสอบ</a>
+                    <a href="#" class="submenu-link nested">
+                      <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                      </svg>
+                      การดำเนินการจัดสอบ
+                    </a>
                   </li>
                   <li class="submenu-item">
-                    <a href="#" class="submenu-link">บันทึกผลการสอบ</a>
+                    <a href="#" class="submenu-link nested">
+                      <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      บันทึกผลการสอบ
+                    </a>
                   </li>
                   <li class="submenu-item">
-                    <a href="#" class="submenu-link">ประวัติการสมัครงาน</a>
+                    <a href="#" class="submenu-link nested">
+                      <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      ประวัติการสมัครงาน
+                    </a>
                   </li>
                   <li class="submenu-item">
-                    <a href="#" class="submenu-link">การประเมินบุคคลและผลงาน</a>
+                    <a href="#" class="submenu-link nested">
+                      <svg class="submenu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                      การประเมินบุคคลและผลงาน
+                    </a>
                   </li>
                 </ul>
               </li>
@@ -145,7 +198,9 @@
             <a href="#" class="nav-link">
               <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               <span v-show="!sidebarCollapsed">ผู้ใช้งานและสิทธิ์</span>
             </a>
@@ -159,31 +214,15 @@
       <!-- Header with White Background -->
       <header class="main-header">
         <div class="header-left">
-          <button v-if="sidebarCollapsed" class="toggle-btn" @click="toggleSidebar">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+          <button class="hamburger-menu" @click="toggleSidebar">
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
           <div class="breadcrumbs">
-            <span>การสรรหาและเลือกสรรบุคลากร</span>
-            <span class="separator">></span>
-            <span>กลุ่มงานทะเบียนประวัติ ทำเหน็จความชอบ และระบบสารสนเทศทรัพยากรบุคคล</span>
-            <span class="separator">></span>
-            <span>จัดการใบลาและการปฏิบัติงาน</span>
-            <span class="separator">></span>
-            <span class="current">บันทึกการปฏิบัติราชการพิเศษ</span>
           </div>
         </div>
         <div class="user-profile">
-          <button class="fullscreen-btn" @click="toggleFullscreen" title="เต็มจอ">
-            <svg v-if="!isFullscreen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-            </svg>
-            <svg v-else fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
           <img src="C:\CS_NATTAPONG\Clicknext_Bangsaen\Frontend-HRM\Frontend-HRM\src\assets\profile.png" alt="Profile"
             class="profile-img">
         </div>
@@ -214,22 +253,6 @@ const toggleSubmenu = (menuKey: string) => {
     expandedMenus.value.splice(index, 1)
   } else {
     expandedMenus.value.push(menuKey)
-  }
-}
-
-const toggleFullscreen = async () => {
-  try {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen()
-      isFullscreen.value = true
-    } else {
-      await document.exitFullscreen()
-      isFullscreen.value = false
-    }
-  } catch (error) {
-    console.log('Fullscreen not supported:', error)
-    document.body.classList.toggle('fullscreen')
-    isFullscreen.value = document.body.classList.contains('fullscreen')
   }
 }
 
@@ -269,7 +292,7 @@ onUnmounted(() => {
 /* Sidebar Styles */
 .sidebar {
   width: 260px;
-  background-color: #3a3b3c;
+  background-color: #1e1e1e;
   color: white;
   flex-shrink: 0;
   transition: width 0.3s ease;
@@ -306,8 +329,8 @@ onUnmounted(() => {
 }
 
 .logo-img {
-  width: 120px;
-  height: 120px;
+  width: 132px;
+  height: 132px;
   flex-shrink: 0;
   object-fit: contain;
 }
@@ -346,7 +369,7 @@ onUnmounted(() => {
 }
 
 .sidebar-nav {
-  padding: 12px 0;
+  padding: 8px 0;
   flex: 1;
   overflow-y: auto;
 }
@@ -364,25 +387,29 @@ onUnmounted(() => {
 .nav-link {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
-  color: #ecf0f1;
+  padding: 11px 16px;
+  color: #e8e8e8;
   text-decoration: none;
   transition: all 0.2s;
   position: relative;
   cursor: pointer;
   font-size: 14px;
+  border-left: 3px solid transparent;
+  font-weight: 400;
 }
 
 .nav-link:hover {
-  background-color: #3a3b3c;
+  background-color: #2a2a2a;
   color: white;
+  border-left-color: transparent;
 }
 
-.nav-link.router-link-active {
-  background-color: #3a3b3c;
+.nav-link.router-link-active,
+.nav-item.has-submenu.expanded>.nav-link {
+  background-color: #0d0d0d;
   color: white;
-  border-left: 4px solid #3498db;
-  padding-left: 16px;
+  border-left-color: #2d96ff;
+  font-weight: 400;
 }
 
 .nav-icon {
@@ -390,6 +417,7 @@ onUnmounted(() => {
   height: 20px;
   margin-right: 12px;
   flex-shrink: 0;
+  color: #ffc107;
 }
 
 .sidebar.collapsed .nav-link {
@@ -407,24 +435,25 @@ onUnmounted(() => {
   margin-left: auto;
   transition: transform 0.3s;
   flex-shrink: 0;
+  color: #999999;
 }
 
 .submenu-arrow.rotated {
-  transform: rotate(180deg);
+  transform: rotate(90deg);
 }
 
 .submenu {
   list-style: none;
   padding: 0;
   margin: 0;
-  background-color: #3a3b3c;
+  background-color: #0d0d0d;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
 }
 
 .nav-item.expanded .submenu {
-  max-height: 1000px;
+  max-height: 2000px;
 }
 
 .submenu-item {
@@ -434,37 +463,65 @@ onUnmounted(() => {
 .submenu-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px 10px 48px;
-  color: #bdc3c7;
+  justify-content: flex-start;
+  padding: 9px 16px 9px 44px;
+  color: #d0d0d0;
   text-decoration: none;
   font-size: 13px;
   transition: all 0.2s;
   cursor: pointer;
+  border-left: 3px solid transparent;
+  gap: 8px;
+  font-weight: 400;
 }
 
 .submenu-link:hover {
-  background-color: #3a3b3c;
+  background-color: #1a1a1a;
   color: white;
 }
 
 .submenu-link.router-link-active {
-  background-color: #27ae60;
+  background-color: #0a0a0a;
   color: white;
-  font-weight: 500;
-  border-left: 4px solid #2ecc71;
-  padding-left: 44px;
+  font-weight: 400;
+  border-left-color: #2d96ff;
+}
+
+.submenu-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: #ffc107;
+  margin-right: 4px;
+}
+
+.nested-submenu {
+  background-color: #080808;
 }
 
 .nested-submenu .submenu-link {
-  padding-left: 64px;
-}
-
-.nested-submenu .submenu-link.router-link-active {
   padding-left: 60px;
+  font-size: 12px;
 }
 
-/* Main Content Styles - White Background */
+.nested-submenu .submenu-link.nested {
+  padding-left: 56px;
+}
+
+.submenu-item.has-submenu>.submenu-link {
+  position: relative;
+}
+
+.submenu-item.has-submenu>.submenu-link>span {
+  flex: 1;
+}
+
+.submenu-item.expanded>.submenu-link {
+  background-color: #0a0a0a;
+  color: white;
+}
+
+/* Main Content Styles */
 .main-content {
   flex: 1;
   display: flex;
@@ -474,7 +531,7 @@ onUnmounted(() => {
   min-width: 0;
 }
 
-/* Main Header - White Background */
+/* Main Header */
 .main-header {
   background-color: white;
   padding: 12px 30px;
@@ -493,29 +550,6 @@ onUnmounted(() => {
   gap: 16px;
   flex: 1;
   min-width: 0;
-}
-
-.toggle-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border: none;
-  color: #2c3e50;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  flex-shrink: 0;
-}
-
-.toggle-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.toggle-btn svg {
-  width: 20px;
-  height: 20px;
 }
 
 .breadcrumbs {
@@ -547,29 +581,6 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
-.fullscreen-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #2c3e50;
-  padding: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fullscreen-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-  transform: scale(1.05);
-}
-
-.fullscreen-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
 .profile-img {
   width: 52px;
   height: 52px;
@@ -581,7 +592,6 @@ onUnmounted(() => {
 
 .page-content {
   flex: 1;
-  padding: 24px;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: white;
