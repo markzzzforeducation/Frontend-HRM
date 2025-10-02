@@ -231,7 +231,7 @@
       <!-- Right Sidebar -->
       <div class="right-frame">
         <div class="sidebar-content">
-          <h3>ดำเนินขั้นตอนการอนุมัติ</h3>
+          <h3>ลำดับขั้นตอนการอนุมัติ</h3>
           <div class="approval-timeline">
             <div class="approval-step">
               <div class="step-avatar">
@@ -262,7 +262,7 @@
     <div class="action-buttons">
       <button class="btn btn-secondary">ยกเลิก</button>
       <button class="btn btn-warning">บันทึกร่าง</button>
-      <button class="btn btn-primary">บันทึก</button>
+      <button class="btn btn-primarysave">บันทึก</button>
     </div>
 
     <!-- Add Staff Sidebar -->
@@ -508,7 +508,6 @@ const removeDocument = (index: number) => {
   gap: 8px;
   font-size: 13px;
   color: #666;
-  border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -519,8 +518,8 @@ const removeDocument = (index: number) => {
 }
 
 .home-icon {
-  color: #f39c12;
-  stroke: #f39c12;
+  color: #010101;
+  stroke: #010101;
 }
 
 .breadcrumb-arrow {
@@ -599,7 +598,8 @@ const removeDocument = (index: number) => {
   margin-bottom: 8px;
   font-weight: 500;
   color: #000;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .form-control {
@@ -660,7 +660,7 @@ const removeDocument = (index: number) => {
 
 .search-btn {
   padding: 10px 20px;
-  background: #3498db;
+  background: #dadada;
   color: white;
   border: none;
   border-radius: 0 4px 4px 0;
@@ -756,7 +756,7 @@ const removeDocument = (index: number) => {
 
 .radio-label span {
   color: #333;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
   vertical-align: middle;
   padding: 8px;
@@ -780,7 +780,12 @@ const removeDocument = (index: number) => {
 }
 
 .btn-primary {
-  background: #3498db;
+  background: #7015d0;
+  color: white;
+}
+
+.btn-primarysave {
+  background: #028f10;
   color: white;
 }
 
@@ -850,7 +855,7 @@ const removeDocument = (index: number) => {
 }
 
 .no-data {
-  text-align: center;
+  text-align: center !important;
   color: #999;
   font-style: italic;
 }
@@ -908,7 +913,7 @@ const removeDocument = (index: number) => {
   justify-content: flex-end;
   gap: 15px;
   padding: 24px 30px 30px 30px;
-  border-top: 2px solid #dc3545;
+  border-top: 2px solid #dddddd;
   background: white;
 }
 
@@ -928,7 +933,7 @@ const removeDocument = (index: number) => {
 }
 
 .sidebar-content h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #000;
   margin: 0 0 20px 0;
@@ -945,9 +950,19 @@ const removeDocument = (index: number) => {
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: #f8f9fa;
   border-radius: 8px;
-  border: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.approval-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  background-color: #c2c2c2;
+  left: 41px;
+  transform: translateX(-50%);
+  top: 75%;
+  height: 57px;
+  width: 1px;
 }
 
 .step-avatar {
@@ -959,7 +974,6 @@ const removeDocument = (index: number) => {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #27ae60;
 }
 
 .step-info {
@@ -968,14 +982,14 @@ const removeDocument = (index: number) => {
 }
 
 .step-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: #000000;
   margin-bottom: 4px;
 }
 
 .step-name2 {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: #787878;
   margin-bottom: 4px;

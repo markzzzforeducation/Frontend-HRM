@@ -329,8 +329,8 @@ onUnmounted(() => {
 }
 
 .logo-img {
-  width: 132px;
-  height: 132px;
+  width: 158px;
+  height: 158px;
   flex-shrink: 0;
   object-fit: contain;
   transition: all 0.3s ease;
@@ -599,7 +599,6 @@ onUnmounted(() => {
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #27ae60;
   flex-shrink: 0;
 }
 
