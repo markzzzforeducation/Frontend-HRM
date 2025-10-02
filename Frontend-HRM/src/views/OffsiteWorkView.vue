@@ -96,9 +96,9 @@
             <div class="date-group">
               <div class="form-group">
                 <label for="startDate">วันที่เริ่มต้นปฏิบัติงานนอกสถานที่*</label>
-                <div class="date-input-group">
-                  <input type="date" id="startDate" v-model="formData.startDate" class="form-control">
-                  <div class="radio-group">
+                <div class="date-with-options">
+                  <input type="date" id="startDate" v-model="formData.startDate" class="form-control date-input-flex">
+                  <div class="radio-group-inline">
                     <label class="radio-label">
                       <input type="radio" name="startTime" value="full" v-model="formData.startTimeType" checked>
                       <span>ตลอดวัน</span>
@@ -117,9 +117,9 @@
 
               <div class="form-group">
                 <label for="endDate">วันที่สิ้นสุดปฏิบัติงานนอกสถานที่*</label>
-                <div class="date-input-group">
-                  <input type="date" id="endDate" v-model="formData.endDate" class="form-control">
-                  <div class="radio-group">
+                <div class="date-with-options">
+                  <input type="date" id="endDate" v-model="formData.endDate" class="form-control date-input-flex">
+                  <div class="radio-group-inline">
                     <label class="radio-label">
                       <input type="radio" name="endTime" value="full" v-model="formData.endTimeType" checked>
                       <span>ตลอดวัน</span>
@@ -228,7 +228,7 @@
         </div>
       </div>
 
-      <!-- Right Sidebar - Approval Timeline -->
+      <!-- Right Sidebar -->
       <div class="right-frame">
         <div class="sidebar-content">
           <h3>ดำเนินขั้นตอนการอนุมัติ</h3>
@@ -258,7 +258,7 @@
       </div>
     </div>
 
-    <!-- Action Buttons - ย้ายออกมาจาก main-content -->
+    <!-- Action Buttons -->
     <div class="action-buttons">
       <button class="btn btn-secondary">ยกเลิก</button>
       <button class="btn btn-warning">บันทึกร่าง</button>
@@ -316,7 +316,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
-// Form data
 const formData = reactive({
   workType: 'offsite',
   orderNumber: '',
@@ -333,7 +332,6 @@ const formData = reactive({
   disapprovalReason: 'แก้ไขเอกสารแนบให้สมบูรณ์'
 })
 
-// Staff management
 const staffList = ref<any[]>([])
 const showAddStaffModal = ref(false)
 const newStaff = reactive<Record<string, any>>({
@@ -346,7 +344,6 @@ const newStaff = reactive<Record<string, any>>({
   department2: ''
 })
 
-// Document management
 const documents = ref([
   {
     fileName: 'เอกสาร.pdf',
@@ -356,22 +353,17 @@ const documents = ref([
 ])
 
 const fileInput = ref<HTMLInputElement | null>(null)
-
-// Map management
 const mapContainer = ref<HTMLElement | null>(null)
 const searchQuery = ref('')
 let map: any = null
 let marker: any = null
 
-// Initialize map
 onMounted(() => {
-  // Load Leaflet CSS
   const link = document.createElement('link')
   link.rel = 'stylesheet'
   link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css'
   document.head.appendChild(link)
 
-  // Load Leaflet JS
   const script = document.createElement('script')
   script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'
   script.onload = () => {
@@ -382,51 +374,33 @@ onMounted(() => {
 
 const initMap = () => {
   if (!mapContainer.value) return
-
-  // @ts-ignore
-  const L = window.L
-
-  // Initialize map centered on Thailand (Bangkok)
+  const L = (window as any).L
   map = L.map(mapContainer.value).setView([13.7563, 100.5018], 12)
-
-  // Add OpenStreetMap tiles
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
     maxZoom: 19
   }).addTo(map)
-
-  // Add click event to map
   map.on('click', (e: any) => {
     addMarker(e.latlng.lat, e.latlng.lng)
   })
 }
 
 const addMarker = (lat: number, lng: number) => {
-  // @ts-ignore
-  const L = window.L
-
-  // Remove existing marker if any
+  const L = (window as any).L
   if (marker) {
     map.removeLayer(marker)
   }
-
-  // Add new marker
   marker = L.marker([lat, lng]).addTo(map)
-
-  // Update location link
   formData.locationLink = `https://www.google.com/maps?q=${lat},${lng}`
 }
 
 const searchLocation = async () => {
   if (!searchQuery.value.trim()) return
-
   try {
-    // Use Nominatim geocoding service (free)
     const response = await fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery.value)}&limit=1`
     )
     const data = await response.json()
-
     if (data && data.length > 0) {
       const { lat, lon, display_name } = data[0]
       map.setView([parseFloat(lat), parseFloat(lon)], 15)
@@ -447,7 +421,6 @@ onUnmounted(() => {
   }
 })
 
-// Methods
 const triggerFileUpload = () => {
   if (fileInput.value) {
     fileInput.value.click()
@@ -478,7 +451,6 @@ const addStaff = () => {
     personnelType: newStaff.personnelType
   })
   showAddStaffModal.value = false
-  // Reset form
   Object.keys(newStaff).forEach((key) => {
     newStaff[key] = ''
   })
@@ -502,7 +474,6 @@ const removeDocument = (index: number) => {
 }
 </script>
 
-
 <style scoped>
 * {
   box-sizing: border-box;
@@ -520,7 +491,6 @@ const removeDocument = (index: number) => {
   padding-top: 0;
 }
 
-/* Green Info Bar */
 .info-bar {
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   color: white;
@@ -530,7 +500,6 @@ const removeDocument = (index: number) => {
   box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
 }
 
-/* Breadcrumb Navigation */
 .breadcrumb-nav {
   background: white;
   padding: 12px 30px;
@@ -570,7 +539,6 @@ const removeDocument = (index: number) => {
   font-weight: 500;
 }
 
-/* Content Wrapper */
 .content-wrapper {
   display: flex;
   min-height: calc(100vh - 120px);
@@ -654,7 +622,6 @@ const removeDocument = (index: number) => {
   color: #999;
 }
 
-/* Map Styles */
 .map-container {
   margin-bottom: 20px;
   position: relative;
@@ -706,37 +673,95 @@ const removeDocument = (index: number) => {
   background: #2980b9;
 }
 
-/* Date Section */
 .date-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-}
-
-.date-input-group {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-}
-
-.radio-group {
-  display: flex;
   gap: 20px;
 }
 
-.radio-label {
+.date-with-options {
   display: flex;
+  gap: 20px;
   align-items: center;
-  gap: 8px;
+}
+
+.date-input-flex {
+  width: 300px;
+  flex-shrink: 0;
+  background-color: #f5f5f5;
+  border: 1px solid #d0d0d0;
+  padding: 12px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.radio-group-inline {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
-  color: #000;
+  color: #333;
+  font-size: 14px;
+  position: relative;
+  white-space: nowrap;
+  width: 100px;
+  height: 22px;
 }
 
 .radio-label input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #b8b8b8;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  background: white;
   margin: 0;
+  padding: 0;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
-/* Staff Section */
+.radio-label input[type="radio"]:checked {
+  border-color: #27ae60;
+  background: white;
+}
+
+.radio-label input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #27ae60;
+}
+
+.radio-label input[type="radio"]:hover {
+  border-color: #27ae60;
+}
+
+.radio-label span {
+  color: #333;
+  font-size: 18px;
+  line-height: 1;
+  vertical-align: middle;
+  padding: 8px;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -794,7 +819,6 @@ const removeDocument = (index: number) => {
   opacity: 0.7;
 }
 
-/* Table Styles */
 .table-container {
   overflow-x: auto;
 }
@@ -831,7 +855,6 @@ const removeDocument = (index: number) => {
   font-style: italic;
 }
 
-/* File Upload */
 .file-info {
   color: #666;
   font-size: 14px;
@@ -875,23 +898,20 @@ const removeDocument = (index: number) => {
   margin-top: 20px;
 }
 
-/* Disapproval Section */
 .disapproval-textarea {
   border: 2px dashed #e74c3c;
   background: #fff5f5;
 }
 
-/* Action Buttons - ย้ายออกมานอก content-wrapper */
 .action-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 15px;
   padding: 24px 30px 30px 30px;
-  border-top: 2px solid #bebebe;
+  border-top: 2px solid #dc3545;
   background: white;
 }
 
-/* Right Sidebar - Approval Timeline */
 .right-frame {
   position: flex;
   background: white;
@@ -967,7 +987,6 @@ const removeDocument = (index: number) => {
   line-height: 1.4;
 }
 
-/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -1029,7 +1048,6 @@ const removeDocument = (index: number) => {
   gap: 15px;
 }
 
-/* Overlay จางๆ ด้านหลัง */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -1039,7 +1057,6 @@ const removeDocument = (index: number) => {
   z-index: 1000;
 }
 
-/* Panel ข้างๆ */
 .sidebar-panel {
   background: #fff;
   width: 400px;
@@ -1051,7 +1068,6 @@ const removeDocument = (index: number) => {
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Animation */
 @keyframes slideIn {
   from {
     transform: translateX(100%);
@@ -1062,7 +1078,6 @@ const removeDocument = (index: number) => {
   }
 }
 
-/* Responsive Design */
 @media (max-width: 1400px) {
   .right-frame {
     width: 280px;
@@ -1114,6 +1129,15 @@ const removeDocument = (index: number) => {
 
   .breadcrumb-arrow:not(:last-of-type) {
     display: none;
+  }
+
+  .date-with-options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .date-input-flex {
+    width: 100%;
   }
 }
 
@@ -1168,13 +1192,21 @@ const removeDocument = (index: number) => {
   }
 
   .date-group {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 
-  .radio-group {
+  .date-with-options {
     flex-direction: column;
-    gap: 10px;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .date-input-flex {
+    width: 100%;
+  }
+
+  .radio-group-inline {
+    flex-wrap: wrap;
   }
 
   .section-header {
@@ -1197,14 +1229,8 @@ const removeDocument = (index: number) => {
     font-size: 13px;
   }
 
-  .map-placeholder {
-    height: 200px;
-  }
-
-  .map-search {
-    top: 10px;
-    left: 10px;
-    right: 10px;
+  .real-map {
+    height: 300px;
   }
 
   .search-input {
@@ -1292,8 +1318,8 @@ const removeDocument = (index: number) => {
     font-size: 12px;
   }
 
-  .map-placeholder {
-    height: 180px;
+  .real-map {
+    height: 250px;
   }
 
   .file-upload-area {

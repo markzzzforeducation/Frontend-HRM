@@ -406,11 +406,19 @@ onUnmounted(() => {
   border-left-color: transparent;
 }
 
-.nav-link.router-link-active,
-.nav-item.has-submenu.expanded>.nav-link {
-  background-color: #0d0d0d;
+/* หัวข้อใหญ่ที่ active - ไม่มีพื้นหลังสีเข้ม */
+.nav-link.router-link-active {
+  background-color: transparent;
   color: white;
-  border-left-color: #2d96ff;
+  border-left-color: transparent;
+  font-weight: 400;
+}
+
+/* หัวข้อใหญ่ที่ expand - ไม่มีพื้นหลังสีเข้ม */
+.nav-item.has-submenu.expanded>.nav-link {
+  background-color: transparent;
+  color: #ffd761;
+  border-left-color: transparent;
   font-weight: 400;
 }
 
@@ -482,9 +490,11 @@ onUnmounted(() => {
   color: white;
 }
 
+/* หัวข้อย่อยที่ active - มีสีเข้ม และตัวอักษรสีเหลือง */
 .submenu-link.router-link-active {
   background-color: #0a0a0a;
-  color: white;
+  color: #ffd761;
+  /* เปลี่ยนจาก white เป็นสีเหลือง */
   font-weight: 400;
   border-left-color: #2d96ff;
 }
@@ -520,7 +530,8 @@ onUnmounted(() => {
 
 .submenu-item.expanded>.submenu-link {
   background-color: #0a0a0a;
-  color: white;
+  color: #ffd761;
+  /* เพิ่มสีเหลือง */
 }
 
 /* Main Content Styles */
